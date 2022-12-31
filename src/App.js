@@ -12,26 +12,26 @@ class App extends Component {
 			searchField: '',
 		}
 
-		console.log('constructor')
+		//console.log('constructor')
 	}
 
 	componentDidMount() {
-		console.log('componentDidMount')
+		//console.log('componentDidMount')
 
-		const myPromise = new Promise((resolve, reject) => {
-			if (true) {
-				setTimeout(() => {
-					resolve('lalalala')
-				}, 1000)
-			} else {
-				reject('failed')
-			}
-		})
+		// const myPromise = new Promise((resolve, reject) => {
+		// 	if (true) {
+		// 		setTimeout(() => {
+		// 			resolve('lalalala')
+		// 		}, 1000)
+		// 	} else {
+		// 		reject('failed')
+		// 	}
+		// })
 
-		myPromise
-			.then((value) => console.log(value + 'aaa'))
-			.then((newValue) => console.log(newValue))
-			.catch((rejectVal) => console.log(rejectVal))
+		// myPromise
+		// 	.then((value) => //console.log(value + 'aaa'))
+		// 	.then((newValue) => //console.log(newValue))
+		// 	.catch((rejectVal) => //console.log(rejectVal))
 
 		fetch('https://jsonplaceholder.typicode.com/users').then((response) =>
 			response.json().then((users) =>
@@ -40,7 +40,7 @@ class App extends Component {
 						return { monsters: users }
 					},
 					() => {
-						console.log(this.state)
+						//console.log(this.state)
 					}
 				)
 			)
@@ -57,7 +57,7 @@ class App extends Component {
 	}
 
 	render() {
-		console.log('render')
+		//console.log('render')
 
 		const { monsters, searchField } = this.state
 		const { onSearchChange } = this
@@ -81,7 +81,7 @@ class App extends Component {
 						</div>
 					)
 				})}
-				<CardList />
+				<CardList monsters={filteredMonsters} />
 			</div>
 		)
 	}
