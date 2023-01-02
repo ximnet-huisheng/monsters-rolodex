@@ -1,83 +1,43 @@
-import { Component } from 'react'
-import logo from './logo.svg'
+import { useState, useEffect } from 'react'
+
 import './App.css'
 import CardList from './components/card-list/card-list.component'
 import SearchBox from './components/search-box/search-box.component'
 
-class App extends Component {
-	constructor() {
-		super()
+const App = () => {
+	const [searchField, setSearchField] = useState('')
+	const [monsters, setMonsters] = useState([])
+	const [filteredMonsters, setfilteredMonsters] = useState([])
 
-		this.state = {
-			monsters: [],
-			searchField: '',
-		}
-
-		//console.log('constructor')
-	}
-
-	componentDidMount() {
-		//console.log('componentDidMount')
-
-		// const myPromise = new Promise((resolve, reject) => {
-		// 	if (true) {
-		// 		setTimeout(() => {
-		// 			resolve('lalalala')
-		// 		}, 1000)
-		// 	} else {
-		// 		reject('failed')
-		// 	}
-		// })
-
-		// myPromise
-		// 	.then((value) => //console.log(value + 'aaa'))
-		// 	.then((newValue) => //console.log(newValue))
-		// 	.catch((rejectVal) => //console.log(rejectVal))
-
+	useEffect(() => {
 		fetch('https://jsonplaceholder.typicode.com/users').then((response) =>
-			response.json().then((users) =>
-				this.setState(
-					() => {
-						return { monsters: users }
-					},
-					() => {
-						//console.log(this.state)
-					}
-				)
-			)
+			response.json().then((users) => setMonsters(users))
 		)
-	}
+	}, [])
 
-	//create method in class instead of render, so that it will only be created once, instead of every render.
-	onSearchChange = (event) => {
-		const searchField = event.target.value.toLocaleLowerCase()
-
-		this.setState(() => {
-			return { searchField }
-		})
-	}
-
-	render() {
-		//console.log('render')
-
-		const { monsters, searchField } = this.state
-		const { onSearchChange } = this
-
-		const filteredMonsters = monsters.filter((monster) => {
+	useEffect(() => {
+		const newFilteredMonsters = monsters.filter((monster) => {
 			return monster.name.toLocaleLowerCase().includes(searchField)
 		})
+		setfilteredMonsters(newFilteredMonsters)
+	}, [monsters, searchField])
 
-		return (
-			<div className='App'>
-				<SearchBox
-					onSearchHandler={onSearchChange}
-					placeholder='Search monsters'
-					className='monster-search-box'
-				/>
-				<CardList monsters={filteredMonsters} />
-			</div>
-		)
+	const onSearchChange = (event) => {
+		const searchFieldString = event.target.value.toLocaleLowerCase()
+		setSearchField(searchFieldString)
 	}
+
+	return (
+		<div className='App'>
+			<h1 className='app-title'>Monster's Rolodex</h1>
+			<SearchBox
+				onSearchHandler={onSearchChange}
+				placeholder='Search monsters'
+				className='monster-search-box'
+			/>
+			<CardList monsters={filteredMonsters} />
+		</div>
+	)
 }
 
 export default App
